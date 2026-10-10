@@ -31,6 +31,11 @@ class PageController extends Controller
         if ($page) {
             $view = view()->exists('pages.'.$page->type) ? 'pages.'.$page->type : 'pages.show';
 
+            // Service, fleet and tour pages share the layout of the suburb pages: they all carry the quote form.
+            if ($page->type === 'page' && str_contains((string) $page->body_html, '[fluentform id="4"]')) {
+                $view = 'pages.service';
+            }
+
             return response()->view($view, ['page' => $page->load('faqs')]);
         }
 

@@ -65,4 +65,22 @@ class TemplatesTest extends TestCase
 
         $this->getRaw('/contact-us/')->assertOk()->assertDontSee('[fluentform', false)->assertDontSee('[8226]', false);
     }
+
+    public function test_service_pages_use_the_quote_layout_and_collect_related_posts(): void
+    {
+        \App\Models\Page::factory()->create([
+            'canonical_path' => '/people-mover/', 'h1' => 'People Mover',
+            'body_html' => '<p>Intro</p><h2>Get a Free Quote Today!</h2>[fluentform id="4"]<h2>Related posts</h2><h2><a href="/blog/x/"> Post X </a></h2>',
+        ]);
+        $this->getRaw('/people-mover/')->assertOk()->assertSee('Related posts')->assertSee('Post X')->assertSee('name="website"', false);
+    }
+
+    public function test_post_template_shows_date_and_cta(): void
+    {
+        \App\Models\Page::factory()->create([
+            'kind' => 'post', 'type' => 'post', 'canonical_path' => '/blog/a-post/', 'h1' => 'A Post',
+            'published_at' => '2025-10-25 06:48:00', 'body_html' => '<p>Hello</p>',
+        ]);
+        $this->getRaw('/blog/a-post/')->assertOk()->assertSee('25 October 2025')->assertSee('Quick Booking');
+    }
 }
