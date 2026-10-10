@@ -47,6 +47,7 @@ class WordPressImporter
         }
 
         $site_name = (string) $channel->title;
+        $schemas = $this->schemaSnippets($channel);
         $rows = [];
 
         foreach ($channel->item as $item) {
@@ -88,6 +89,7 @@ class WordPressImporter
                 'status' => Page::STATUS_PUBLISHED,
                 'published_at' => (string) $wp->post_date_gmt ?: null,
                 'wp_modified_at' => (string) $wp->post_modified_gmt ?: null,
+                'schema_json' => $schemas[(int) $wp->post_id] ?? null,
                 'wp_id' => (int) $wp->post_id,
                 '_custom_permalink' => $meta['custom_permalink'] ?? null,
                 '_needs_snapshot' => ! $seoTitle || ! $desc,
@@ -96,6 +98,42 @@ class WordPressImporter
         }
 
         return $rows;
+    }
+
+    /**
+     * Hand-written JSON-LD kept in Elementor Custom Code snippets, keyed by the page ID they target.
+     * Carried verbatim in Phase 1. Invalid JSON is reported and skipped.
+     *
+     * @return array<int,string>
+     */
+    private function schemaSnippets(SimpleXMLElement $channel): array
+    {
+        $out = [];
+        foreach ($channel->item as $item) {
+            $wp = $item->children(self::NS['wp']);
+            if ((string) $wp->post_type !== 'elementor_snippet' || (string) $wp->status !== 'publish') {
+                continue;
+            }
+            $meta = [];
+            foreach ($wp->postmeta as $m) {
+                $meta[(string) $m->meta_key] = (string) $m->meta_value;
+            }
+            $code = trim($meta['_elementor_code'] ?? '');
+            if (! str_contains($code, 'application/ld+json') || ! preg_match('#singular/page/(\d+)#', $meta['_elementor_conditions'] ?? '', $c)) {
+                continue;
+            }
+            preg_match_all('#<script[^>]*application/ld\+json[^>]*>(.*?)</script>#is', $code, $blocks);
+            foreach ($blocks[1] as $json) {
+                if (json_decode($json) === null) {
+                    $this->notes[] = 'Invalid JSON-LD in snippet "'.(string) $item->title.'" (page '.$c[1].'), skipped';
+
+                    continue 2;
+                }
+            }
+            $out[(int) $c[1]] = $code;
+        }
+
+        return $out;
     }
 
     /**

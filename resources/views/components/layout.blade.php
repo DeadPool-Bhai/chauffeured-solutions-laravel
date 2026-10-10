@@ -10,6 +10,22 @@
     @endif
     <meta name="robots" content="{{ $page->robots ?: 'index, follow' }}">
     <link rel="canonical" href="{{ $page->canonicalUrl() }}">
+    @php
+        $ogImage = $page->og_image ?: $page->featured_image ?: '/wp-content/uploads/2025/05/chauffeured-solutions-Australia.jpg';
+        $ogImage = str_starts_with($ogImage, 'http') ? $ogImage : rtrim(config('app.url'), '/').$ogImage;
+    @endphp
+    <meta property="og:locale" content="en_AU">
+    <meta property="og:type" content="{{ $page->kind === 'post' ? 'article' : 'website' }}">
+    <meta property="og:title" content="{{ $page->seo_title ?: $page->title }}">
+    @if ($page->meta_description)
+        <meta property="og:description" content="{{ $page->meta_description }}">
+    @endif
+    <meta property="og:url" content="{{ $page->canonicalUrl() }}">
+    <meta property="og:site_name" content="{{ config('site.name') }}">
+    <meta property="og:image" content="{{ $ogImage }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $page->seo_title ?: $page->title }}">
+    <meta name="twitter:image" content="{{ $ogImage }}">
     <link rel="icon" href="/wp-content/uploads/2025/06/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,6 +42,9 @@
     @endif
     @if ($rk = config('leads.recaptcha.site_key'))
         <script src="https://www.google.com/recaptcha/api.js?render={{ $rk }}" async defer></script>
+    @endif
+    @if ($page->schema_json)
+        {!! $page->schema_json !!}
     @endif
     @stack('head')
 </head>
