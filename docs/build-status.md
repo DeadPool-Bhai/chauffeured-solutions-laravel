@@ -8,6 +8,7 @@ Supersedes the data model in migration-plan.md: pages and posts share one `pages
 - Templates: home, suburb, default (all other types). Quote form with honeypot, throttle, reCAPTCHA v3, saved lead, queued emails, redirect to /thank-you-f4-quote-request/.
 - SEO output: sitemap_index/page/post sitemaps (parity with live via `php artisan seo:parity`), robots.txt, canonical, OG/Twitter, GTM + GA4 from env.
 - Filament admin (`/admin`, path set by ADMIN_PATH): pages (SEO fields, status), redirects (rejects self-loops and chains), leads (read-only, stats). Changing a page URL creates a 301 automatically.
+- Lead emails default to asker.asraf@stechs.com.au; switch LEAD_NOTIFY_TO to paul@ and booking@ at cutover.
 - 38 tests passing. Every published URL renders 200 with one H1, apart from the two that have redirect rules on live (/holden-caprice/, /corporate-sedan/).
 
 ## Not done
