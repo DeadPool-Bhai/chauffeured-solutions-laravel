@@ -24,9 +24,12 @@
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ $ga }}"></script>
         <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','{{ $ga }}');</script>
     @endif
+    @if ($rk = config('leads.recaptcha.site_key'))
+        <script src="https://www.google.com/recaptcha/api.js?render={{ $rk }}" async defer></script>
+    @endif
     @stack('head')
 </head>
-<body x-data="{ quote: false }" @keydown.escape.window="quote = false">
+<body x-data="{ quote: {{ $errors->any() && old('_ctx') === 'modal' ? 'true' : 'false' }} }" @keydown.escape.window="quote = false">
     @if ($gtm ?? false)
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $gtm }}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     @endif

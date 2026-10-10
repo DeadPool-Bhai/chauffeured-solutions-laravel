@@ -9,7 +9,7 @@ class Shortcodes
     {
         return preg_replace_callback('#\[(fluentform|trustindex|\d+)([^\]]*)\]#i', function ($m) {
             return match (strtolower($m[1])) {
-                'fluentform' => view('components.quote-form')->render(),
+                'fluentform' => view('components.quote-form', ['ctx' => 'page'])->render(),
                 'trustindex' => view('components.reviews')->render(),
                 default => '', // Elementor template includes, e.g. [8226]
             };

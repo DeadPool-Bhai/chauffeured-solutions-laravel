@@ -32,7 +32,7 @@
                 <section class="bg-ink" id="quote">
                     <div class="mx-auto max-w-3xl px-5 py-16">
                         <h2 class="font-heading text-3xl font-semibold">{{ $s['title'] }}</h2>
-                        <div class="mt-8">@include('components.quote-form')</div>
+                        <div class="mt-8"><x-quote-form ctx="page" /></div>
                     </div>
                 </section>
                 <ul class="mx-auto grid max-w-7xl gap-4 px-5 py-8 text-sm font-medium sm:grid-cols-3">
