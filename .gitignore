@@ -25,3 +25,6 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Media is deployed separately from the repo
+/public/wp-content/uploads

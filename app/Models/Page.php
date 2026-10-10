@@ -22,6 +22,7 @@ class Page extends Model
         return [
             'published_at' => 'datetime',
             'wp_modified_at' => 'datetime',
+            'data' => 'array',
         ];
     }
 

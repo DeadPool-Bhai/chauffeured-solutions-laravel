@@ -31,6 +31,9 @@ class ImportWordpress extends Command
         }
 
         $raw = json_decode(file_get_contents($this->option('redirects')), true);
+        if (is_file($extra = database_path('seeders/data/redirects_extra.json'))) {
+            $raw = array_merge($raw, json_decode(file_get_contents($extra), true));
+        }
         $overrides = is_file($f = database_path('seeders/data/redirect_overrides.json')) ? json_decode(file_get_contents($f), true) : [];
         foreach ($raw as &$rule) {
             if (isset($overrides[$rule['from']])) {
@@ -39,6 +42,7 @@ class ImportWordpress extends Command
         }
         unset($rule);
         $redirects = $importer->buildRedirects($raw, $pathByKey);
+        $pages = $importer->rewriteLinks($pages, $redirects, $pathByKey);
 
         $this->table(['Metric', 'Count'], [
             ['Pages', count(array_filter($pages, fn ($p) => $p['kind'] === 'page'))],

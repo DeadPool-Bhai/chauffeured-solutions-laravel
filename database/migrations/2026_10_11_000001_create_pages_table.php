@@ -38,6 +38,9 @@ return new class extends Migration
             // Existing hand-built JSON-LD blocks, carried over verbatim in Phase 1.
             $table->longText('schema_json')->nullable();
 
+            // Structured content for templated pages (hero, cards, stats). Null for plain pages.
+            $table->json('data')->nullable();
+
             $table->string('status', 10)->default('draft')->index(); // published | draft
             $table->timestamp('published_at')->nullable();
             $table->timestamp('wp_modified_at')->nullable();

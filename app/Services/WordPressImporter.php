@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Page;
 use App\Models\Redirect;
+use App\Support\HtmlCleaner;
 use App\Support\UrlPath;
 use SimpleXMLElement;
 
@@ -63,7 +64,7 @@ class WordPressImporter
 
             $path = $this->pathOf((string) $item->link, $site);
             $body = (string) $item->children(self::NS['content'])->encoded;
-            [$h1, $body] = $this->splitH1($body);
+            [$h1, $body] = $this->splitH1(HtmlCleaner::clean($body, $site));
             $title = html_entity_decode((string) $item->title, ENT_QUOTES);
 
             $snap = $snapshot[$path] ?? [];
@@ -163,6 +164,61 @@ class WordPressImporter
         }
 
         return $out;
+    }
+
+    /**
+     * Point internal links at their final canonical target: skip redirect hops and use each
+     * page's exact slash form. Reports links that lead nowhere.
+     *
+     * @param  list<array<string,mixed>>  $pages
+     * @param  list<array<string,mixed>>  $redirects  output of buildRedirects()
+     * @param  array<string,string>  $pathByKey
+     * @return list<array<string,mixed>>
+     */
+    public function rewriteLinks(array $pages, array $redirects, array $pathByKey): array
+    {
+        $map = [];
+        foreach ($redirects as $r) {
+            if ($r['status_code'] !== 410 && $r['to_path'] !== null) {
+                $map[$r['from_path']] = $r['to_path'];
+            }
+        }
+        $stats = ['redirect' => 0, 'normalised' => 0];
+        $broken = [];
+
+        foreach ($pages as &$page) {
+            $page['body_html'] = preg_replace_callback('#href="(/[^"\#?]*)((?:\?[^"\#]*)?(?:\#[^"]*)?)"#', function ($m) use ($map, $pathByKey, &$stats, &$broken, $page) {
+                [$all, $path, $tail] = $m;
+                if (str_starts_with($path, '/wp-content/') || str_starts_with($path, '/wp-admin') || $path === '/') {
+                    return $all;
+                }
+                $key = UrlPath::redirectKey($path);
+                $target = $path;
+                if (isset($map[$key])) {
+                    $target = $map[$key];
+                    $stats['redirect']++;
+                    $key = UrlPath::redirectKey($target);
+                }
+                if (isset($pathByKey[$key])) {
+                    if ($pathByKey[$key] !== $target) {
+                        $stats['normalised']++;
+                    }
+                    $target = $pathByKey[$key];
+                } else {
+                    $broken[$page['canonical_path']][] = $path;
+                }
+
+                return 'href="'.$target.$tail.'"';
+            }, $page['body_html']);
+        }
+        unset($page);
+
+        $this->notes[] = "Links rewritten past redirects: {$stats['redirect']}, slash form normalised: {$stats['normalised']}";
+        foreach ($broken as $from => $links) {
+            $this->notes[] = "Broken internal link on {$from}: ".implode(', ', array_unique($links));
+        }
+
+        return $pages;
     }
 
     public function persist(array $pages, array $redirects): void

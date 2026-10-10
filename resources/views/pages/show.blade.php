@@ -1,10 +1,8 @@
-@extends('layouts.app')
-
-@section('content')
-    <main>
+<x-layout :page="$page">
+    <article class="mx-auto max-w-4xl px-5 py-16 md:py-24">
         @if ($page->h1)
-            <h1>{{ $page->h1 }}</h1>
+            <h1 class="font-display text-4xl font-semibold leading-tight md:text-5xl">{{ $page->h1 }}</h1>
         @endif
-        {!! $page->body_html !!}
-    </main>
-@endsection
+        <div class="prose-cs mt-8">{!! \App\Support\Shortcodes::expand($page->body_html ?? '') !!}</div>
+    </article>
+</x-layout>

@@ -29,7 +29,9 @@ class PageController extends Controller
         $page = Page::live()->where('canonical_path', $path)->first();
 
         if ($page) {
-            return response()->view('pages.show', ['page' => $page->load('faqs')]);
+            $view = view()->exists('pages.'.$page->type) ? 'pages.'.$page->type : 'pages.show';
+
+            return response()->view($view, ['page' => $page->load('faqs')]);
         }
 
         if (($twin = UrlPath::twin($path)) !== null) {
