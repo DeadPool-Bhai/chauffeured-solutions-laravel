@@ -1,0 +1,44 @@
+@import 'tailwindcss';
+
+@source '../**/*.blade.php';
+@source '../../app/**/*.php';
+
+@theme {
+    --font-sans: 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-heading: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Lato', ui-sans-serif, system-ui, sans-serif;
+    --color-ink: #090909;
+    --color-ink-2: #141414;
+    --color-gold: #b38931;
+    --color-gold-2: #c99d43;
+    --color-cream: #fceed9;
+}
+
+@layer base {
+    html { scroll-behavior: smooth; }
+    body { @apply bg-ink font-sans text-white antialiased; }
+    [x-cloak] { display: none !important; }
+}
+
+@layer components {
+    .btn { @apply inline-flex items-center justify-center gap-2 rounded-[20px] px-6 py-2.5 text-sm font-semibold tracking-wide transition; }
+    .btn-gold { @apply bg-gold text-white hover:bg-gold-2; }
+    .btn-ghost { @apply border border-white/70 text-white hover:border-gold hover:text-gold; }
+    .eyebrow { @apply font-heading text-sm font-medium uppercase tracking-[0.2em] text-gold; }
+    .section { @apply mx-auto w-full max-w-7xl px-5 py-16 md:py-24; }
+
+    /* Rendered rich text from the CMS */
+    .prose-cs { @apply text-[15px] leading-7 text-white/80; }
+    .prose-cs > * + * { @apply mt-4; }
+    .prose-cs h2 { @apply font-heading text-3xl font-semibold leading-tight text-white md:text-4xl; }
+    .prose-cs h3 { @apply mt-8 font-heading text-xl font-semibold text-gold; }
+    .prose-cs h4 { @apply mt-6 font-heading text-lg font-semibold text-white; }
+    .prose-cs a { @apply text-gold underline-offset-4 hover:underline; }
+    .prose-cs strong, .prose-cs b { @apply font-semibold text-white; }
+    .prose-cs ul { @apply list-disc space-y-1.5 pl-6 marker:text-gold; }
+    .prose-cs ol { @apply list-decimal space-y-1.5 pl-6 marker:text-gold; }
+    .prose-cs img { @apply my-6 h-auto max-w-full rounded-2xl; }
+    .prose-cs--cards img { @apply max-h-72 w-full object-cover; }
+    .prose-cs table { @apply w-full border-collapse text-sm; }
+    .prose-cs th, .prose-cs td { @apply border border-white/15 px-3 py-2 text-left; }
+}
