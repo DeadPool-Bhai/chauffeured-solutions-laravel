@@ -1,5 +1,5 @@
 <p>Hi Admin,</p>
-<p>You’ve just received a new chauffeur service booking request from {{ $lead->payload['name'] }}. Please review the booking details below and get in touch with the client to confirm the reservation.</p>
+<p>You’ve just received a new chauffeur service booking request from {{ $lead->contact_name }}. Please review the booking details below and get in touch with the client to confirm the reservation.</p>
 <h3>Booking Details</h3>
 <table cellpadding="6" style="border-collapse:collapse">
     @foreach ($rows as $label => $value)

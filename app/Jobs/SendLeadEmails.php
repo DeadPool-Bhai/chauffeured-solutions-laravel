@@ -33,7 +33,9 @@ class SendLeadEmails implements ShouldQueue
         if ($to) {
             Mail::to($to)->send(new LeadReceived($lead));
         }
-        Mail::to($lead->payload['email'])->send(new LeadConfirmation($lead));
+        if ($lead->contact_email) {
+            Mail::to($lead->contact_email)->send(new LeadConfirmation($lead));
+        }
 
         $lead->forceFill(['notified_at' => now()])->save();
     }

@@ -1,4 +1,4 @@
-<p>Hi {{ $lead->payload['name'] }},</p>
+<p>Hi {{ $lead->contact_name }},</p>
 <p>Thank you for choosing Chauffeured Solutions. We’ve successfully received your chauffeur service request. Our team is now reviewing your booking and will be in touch shortly to confirm all the details.</p>
 <h3>Your Submitted Details</h3>
 <table cellpadding="6" style="border-collapse:collapse">

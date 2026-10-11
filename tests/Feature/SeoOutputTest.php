@@ -74,4 +74,11 @@ class SeoOutputTest extends TestCase
             ->assertSee('<meta property="og:image" content="https://chauffeuredsolutions.com.au/wp-content/uploads/2025/vip.jpg">', false)
             ->assertSee('<meta name="twitter:card" content="summary_large_image">', false);
     }
+
+    public function test_booking_confirmed_page_is_noindex_and_not_in_the_sitemap(): void
+    {
+        $this->seed(\Database\Seeders\BookingConfirmedSeeder::class);
+        $this->getRaw('/booking-confirmed/')->assertOk()->assertSee('noindex', false)->assertSee('Your booking is confirmed');
+        $this->get('/page-sitemap.xml')->assertDontSee('booking-confirmed');
+    }
 }

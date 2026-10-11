@@ -13,7 +13,7 @@ class LeadConfirmation extends Mailable
 
     public function envelope(): Envelope
     {
-        return new Envelope(subject: 'Thank you '.$this->lead->payload['name'].', We’re Processing Your Chauffeur Booking Request');
+        return new Envelope(subject: 'Thank you '.$this->lead->contact_name.', We’re Processing Your Chauffeur Booking Request');
     }
 
     public function content(): Content

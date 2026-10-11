@@ -15,4 +15,22 @@ class Lead extends Model
             'notified_at' => 'datetime',
         ];
     }
+
+    /** The form definition for non-quote forms, from config/forms.php. */
+    public function formConfig(): ?array
+    {
+        return collect(config('forms'))->firstWhere('form_key', $this->form_key);
+    }
+
+    public function getContactNameAttribute(): string
+    {
+        $field = $this->formConfig()['name_field'] ?? 'name';
+
+        return trim((string) ($this->payload[$field] ?? '')) ?: 'there';
+    }
+
+    public function getContactEmailAttribute(): ?string
+    {
+        return $this->payload['email'] ?? null;
+    }
 }

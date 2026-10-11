@@ -14,11 +14,12 @@ class LeadReceived extends Mailable
 
     public function envelope(): Envelope
     {
-        $p = $this->lead->payload;
+        $subject = $this->lead->formConfig()['subject'] ?? 'New Chauffeur Service Booking request from :name';
+        $email = $this->lead->contact_email;
 
         return new Envelope(
-            subject: 'New Chauffeur Service Booking request from '.$p['name'],
-            replyTo: [new Address($p['email'], $p['name'])],
+            subject: str_replace(':name', $this->lead->contact_name, $subject),
+            replyTo: $email ? [new Address($email, $this->lead->contact_name)] : [],
         );
     }
 

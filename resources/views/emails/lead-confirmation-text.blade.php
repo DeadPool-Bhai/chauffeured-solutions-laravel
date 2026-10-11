@@ -1,4 +1,4 @@
-Hi {{ $lead->payload['name'] }},
+Hi {{ $lead->contact_name }},
 
 Thank you for choosing Chauffeured Solutions. We’ve successfully received your chauffeur service request. Our team is now reviewing your booking and will be in touch shortly to confirm all the details.
 
