@@ -9,10 +9,13 @@ Supersedes the data model in migration-plan.md: pages and posts share one `pages
 - SEO output: sitemap_index/page/post sitemaps (parity with live via `php artisan seo:parity`), robots.txt, canonical, OG/Twitter, GTM + GA4 from env.
 - Filament admin (`/admin`, path set by ADMIN_PATH): pages (SEO fields, status), redirects (rejects self-loops and chains), leads (read-only, stats). Changing a page URL creates a 301 automatically.
 - Lead emails default to asker.asraf@stechs.com.au; switch LEAD_NOTIFY_TO to paul@ and booking@ at cutover.
-- 41 tests passing. Every published URL renders 200 with one H1, apart from the two that have redirect rules on live (/holden-caprice/, /corporate-sedan/).
+- 48 tests passing. Every published URL renders 200 with one H1, apart from the two that have redirect rules on live (/holden-caprice/, /corporate-sedan/).
+
+- Wedding quote (form 9) and wedding booking (form 7) forms, defined in config/forms.php. Form 9 goes to the thank-you page; form 7 shows a message on the same page. Email is optional on form 7 as on live, so the customer confirmation is skipped when blank.
+- /booking-confirmed/ (noindex, not in sitemap) for the Limo Anywhere redirect, seeded by BookingConfirmedSeeder.
+- /category/corporate/ and /category/blog/ 301 to /blog/ (my choice, confirm).
 
 ## Not done
-- Wedding forms 7 and 9, /booking-confirmed/ page, category archive /category/corporate/.
 - AI module, llms.txt, Release 1.1 schema.
 - Media copy to public/wp-content/uploads (gitignored, deploy separately).
 

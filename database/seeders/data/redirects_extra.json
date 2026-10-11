@@ -1,5 +1,37 @@
 [
-  {"from": "event-transfers-sydney", "to": "/event-transfers", "status": 301, "hits": 0, "why": "Live site fuzzy-matches this to /blue-mountains-tour/. 21 internal links intend the event transfers page."},
-  {"from": "corporate-cars/hire-a-limousine/", "to": "/blog/hire-a-limousine-for-business", "status": 301, "hits": 0, "why": "Live WordPress redirects this; not in Rank Math."},
-  {"from": "security-escorted-service/", "to": "/corporate-hire/", "status": 301, "hits": 0, "why": "Draft page. Home page links to it, visitors get 404 today."}
+  {
+    "from": "event-transfers-sydney",
+    "to": "/event-transfers",
+    "status": 301,
+    "hits": 0,
+    "why": "Live site fuzzy-matches this to /blue-mountains-tour/. 21 internal links intend the event transfers page."
+  },
+  {
+    "from": "corporate-cars/hire-a-limousine/",
+    "to": "/blog/hire-a-limousine-for-business",
+    "status": 301,
+    "hits": 0,
+    "why": "Live WordPress redirects this; not in Rank Math."
+  },
+  {
+    "from": "security-escorted-service/",
+    "to": "/corporate-hire/",
+    "status": 301,
+    "hits": 0,
+    "why": "Draft page. Home page links to it, visitors get 404 today."
+  },
+  {
+    "from": "category/corporate/",
+    "to": "/blog/",
+    "status": 301,
+    "hits": 0,
+    "why": "Live category archive is noindex. Send visitors to the blog index (my choice, confirm)."
+  },
+  {
+    "from": "category/blog/",
+    "to": "/blog/",
+    "status": 301,
+    "hits": 0,
+    "why": "Category archive; 40 of 42 posts. Send visitors to the blog index."
+  }
 ]
