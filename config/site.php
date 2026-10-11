@@ -20,9 +20,13 @@ return [
         'Instagram' => 'https://www.instagram.com/chauffeuredsolutions.com.au/',
     ],
 
+    // Staging: noindex header, robots.txt disallow all, no GTM/GA4, optional HTTP auth ("user:password").
+    'staging' => (bool) env('APP_STAGING', false),
+    'staging_auth' => env('STAGING_AUTH'),
+
     'tracking' => [
-        'gtm' => env('GTM_ID', 'GTM-KBKWMQW5'),
-        'ga4' => env('GA4_ID', 'G-0YJM2KDWVT'),
+        'gtm' => env('APP_STAGING', false) ? null : env('GTM_ID', 'GTM-KBKWMQW5'),
+        'ga4' => env('APP_STAGING', false) ? null : env('GA4_ID', 'G-0YJM2KDWVT'),
     ],
 
     'topbar' => [

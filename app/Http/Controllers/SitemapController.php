@@ -36,6 +36,10 @@ class SitemapController extends Controller
     {
         $admin = '/'.trim(env('ADMIN_PATH', 'admin'), '/').'/';
 
+        if (config('site.staging')) {
+            return response("User-agent: *\nDisallow: /\n", 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
+        }
+
         $body = implode("\n", [
             'User-agent: *',
             "Disallow: {$admin}",
