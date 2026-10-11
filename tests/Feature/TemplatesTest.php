@@ -83,4 +83,12 @@ class TemplatesTest extends TestCase
         ]);
         $this->getRaw('/blog/a-post/')->assertOk()->assertSee('25 October 2025')->assertSee('Quick Booking');
     }
+
+    public function test_blog_index_lists_posts_newest_first(): void
+    {
+        \App\Models\Page::factory()->create(['type' => 'blog_index', 'canonical_path' => '/blog/', 'h1' => 'Blog']);
+        \App\Models\Page::factory()->create(['kind' => 'post', 'type' => 'post', 'canonical_path' => '/blog/old/', 'h1' => 'Old post', 'published_at' => '2025-01-01']);
+        \App\Models\Page::factory()->create(['kind' => 'post', 'type' => 'post', 'canonical_path' => '/blog/new/', 'h1' => 'New post', 'published_at' => '2025-06-01']);
+        $this->getRaw('/blog/')->assertOk()->assertSeeInOrder(['New post', 'Old post']);
+    }
 }
