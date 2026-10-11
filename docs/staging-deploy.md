@@ -4,7 +4,7 @@ Staging URL used below: `staging.chauffeuredsolutions.com.au`. Swap in whatever 
 
 ## 1. Create the site (hPanel)
 1. Domains, Subdomains: create `staging`. Note the folder it creates (for example `~/domains/chauffeuredsolutions.com.au/public_html/staging`).
-2. Advanced, PHP Configuration: PHP 8.3 (8.2 minimum). Enable extensions: `mbstring`, `xml`, `intl`, `pdo_mysql`, `zip`, `gd`, `fileinfo`.
+2. Advanced, PHP Configuration: PHP 8.3 (required). Enable extensions: `mbstring`, `xml`, `intl`, `pdo_mysql`, `zip`, `gd`, `fileinfo`.
 3. Databases, MySQL: create a database and user. Keep the three values for `.env`.
 4. Email: create a mailbox to send from (for example `bookings@chauffeuredsolutions.com.au`). Check SPF and DKIM are on for the domain, or lead emails land in spam.
 5. SSL: switch on the free SSL for the subdomain.
